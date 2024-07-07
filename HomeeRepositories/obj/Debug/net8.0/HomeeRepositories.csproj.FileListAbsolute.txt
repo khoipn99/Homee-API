@@ -1,0 +1,28 @@
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.deps.json
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.runtimeconfig.json
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.dll
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.pdb
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfoInputs.cache
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfo.cs
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.dll
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\refint\HomeeRepositories.dll
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.pdb
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.genruntimeconfig.cache
+C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\ref\HomeeRepositories.dll
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.deps.json
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.runtimeconfig.json
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.dll
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.pdb
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.AssemblyReference.cache
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfoInputs.cache
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfo.cs
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.CoreCompileInputs.cache
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.dll
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\refint\HomeeRepositories.dll
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.pdb
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.genruntimeconfig.cache
+C:\Users\ProTech247\Downloads\Homee111\Homee\HomeeRepositories\obj\Debug\net8.0\ref\HomeeRepositories.dll
