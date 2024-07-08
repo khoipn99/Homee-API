@@ -1,4 +1,6 @@
-CREATE DATABASE Homee
+CREATE DATABASE Homee;
+
+GO
 USE [Homee]
 GO
 /****** Object:  Table [dbo].[categories]    Script Date: 7/7/2024 11:43:11 PM ******/
