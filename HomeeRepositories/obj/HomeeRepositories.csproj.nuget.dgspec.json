@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj": {}
+    "D:\\Khoi\\EXE101\\Homee-API\\HomeeRepositories\\HomeeRepositories.csproj": {}
   },
   "projects": {
-    "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj": {
+    "D:\\Khoi\\EXE101\\Homee-API\\HomeeRepositories\\HomeeRepositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
+        "projectUniqueName": "D:\\Khoi\\EXE101\\Homee-API\\HomeeRepositories\\HomeeRepositories.csproj",
         "projectName": "HomeeRepositories",
-        "projectPath": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
+        "projectPath": "D:\\Khoi\\EXE101\\Homee-API\\HomeeRepositories\\HomeeRepositories.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\obj\\",
+        "outputPath": "D:\\Khoi\\EXE101\\Homee-API\\HomeeRepositories\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
