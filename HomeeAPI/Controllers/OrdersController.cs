@@ -179,9 +179,7 @@ namespace HomeeAPI.Controllers
                 Quantity = orderResponse.Quantity,
                 UserId = orderResponse.UserId,
                 Status = orderResponse.Status,
-                OrderDate = orderResponse.OrderDate,
- 
-
+                OrderDate = orderResponse.OrderDate
             };
 
             _unitOfWork.OrderRepository.Insert(order);
@@ -223,74 +221,12 @@ namespace HomeeAPI.Controllers
                 return NotFound(errorResponse);
             }
 
-            _unitOfWork.OrderRepository.Delete(id); 
+            _unitOfWork.OrderRepository.Delete(id);
             _unitOfWork.Save();
 
             return NoContent();
         }
-        [HttpGet("by-user")]
-        public ActionResult<ApiResponse<IEnumerable<OrderResponse>>> GetOrderByUser(int userId)
-        {
-            var response = new ApiResponse<IEnumerable<OrderResponse>>();
 
-            try
-            {
-                var orders = _unitOfWork.OrderRepository.GetAll()
-                                                        .Where(order => order.UserId == userId)
-                                                        .Select(order => new OrderResponse
-                                                        {
-                                                            Id = order.Id,
-                                                            ChefId = order.ChefId,
-                                                            DeliveryAddress = order.DeliveryAddress,
-                                                            OrderPrice = order.OrderPrice,
-                                                            Quantity = order.Quantity,
-                                                            UserId = order.UserId,
-                                                            Status = order.Status,
-                                                            OrderDate = order.OrderDate
-                                                        }).ToList();
-
-                response.Ok(orders);
-            }
-            catch (Exception ex)
-            {
-                response.Error($"An error occurred while retrieving order: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
-        }
-
-        [HttpGet("by-chef")]
-        public ActionResult<ApiResponse<IEnumerable<OrderResponse>>> GetOrderByChef(int chefId)
-        {
-            var response = new ApiResponse<IEnumerable<OrderResponse>>();
-
-            try
-            {
-                var orders = _unitOfWork.OrderRepository.GetAll()
-                                                        .Where(order => order.ChefId == chefId)
-                                                        .Select(order => new OrderResponse
-                                                        {
-                                                            Id = order.Id,
-                                                            ChefId = order.ChefId,
-                                                            DeliveryAddress = order.DeliveryAddress,
-                                                            OrderPrice = order.OrderPrice,
-                                                            Quantity = order.Quantity,
-                                                            UserId = order.UserId,
-                                                            Status = order.Status,
-                                                            OrderDate = order.OrderDate
-                                                        }).ToList();
-
-                response.Ok(orders);
-            }
-            catch (Exception ex)
-            {
-                response.Error($"An error occurred while retrieving order: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
-        }
         private async Task<bool> OrderExists(int id)
         {
             var order = _unitOfWork.OrderRepository.GetByID(id);

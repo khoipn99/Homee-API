@@ -8,10 +8,12 @@ using HomeeRepositories.Models;
 using HomeeRepositories.Interface;
 using HomeeAPI.DTO.ResponseObject;
 using HomeeAPI.DTO;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using HomeeAPI.DTO.RequestObject;
 
 namespace HomeeAPI.Controllers
 {
@@ -196,23 +198,86 @@ namespace HomeeAPI.Controllers
         }
 
         // POST: api/Chefs
+        //[HttpPost]
+        //public async Task<ActionResult<ApiResponse<ChefResponse>>> PostChef(ChefResponse chefResponse)
+        //{
+        //    var chef = new Chef
+        //    {
+        //        Name = chefResponse.Name,
+        //        Address = chefResponse.Address,
+        //        CreatorId = chefResponse.CreatorId,
+        //        ProfilePicture = chefResponse.ProfilePicture,
+        //        Score = chefResponse.Score,
+        //        Hours = chefResponse.Hours,
+        //        Status = chefResponse.Status,
+        //        Email = chefResponse.Email,
+        //        Password = chefResponse.Password,
+        //        Phone = chefResponse.Phone,
+        //        Money = chefResponse.Money,
+        //        Banking = chefResponse.Banking
+        //    };
+
+        //    _unitOfWork.ChefRepository.Insert(chef);
+
+        //    try
+        //    {
+        //        _unitOfWork.Save();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (await ChefExists(chef.Id))
+        //        {
+        //            var errorResponse = new ApiResponse<ChefResponse>();
+        //            errorResponse.Error("Chef conflict");
+        //            return Conflict(errorResponse);
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    chefResponse.Id = chef.Id;
+
+        //    var response = new ApiResponse<ChefResponse>();
+        //    response.Ok(chefResponse);
+        //    return CreatedAtAction("GetChef", new { id = chef.Id }, response);
+        //}
+        // POST: api/Chefs
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<ChefResponse>>> PostChef(ChefResponse chefResponse)
+        public async Task<ActionResult<ApiResponse<ChefResponse>>> PostChef([FromForm] ChefRequest chefRequest, IFormFile file)
         {
+            // Upload image if provided
+            string profilePicturePath = null;
+            if (file != null && file.Length > 0)
+            {
+                var uploadResponse = await UploadProfilePicture(file);
+                if (uploadResponse is OkObjectResult okResult)
+                {
+                    var responseObject = okResult.Value as dynamic;
+                    profilePicturePath = responseObject.FilePath;
+                }
+                else
+                {
+                    // Handle upload error if needed
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload profile picture.");
+                }
+            }
+
             var chef = new Chef
             {
-                Name = chefResponse.Name,
-                Address = chefResponse.Address,
-                CreatorId = chefResponse.CreatorId,
-                ProfilePicture = chefResponse.ProfilePicture,
-                Score = chefResponse.Score,
-                Hours = chefResponse.Hours,
-                Status = chefResponse.Status,
-                Email = chefResponse.Email,
-                Password = chefResponse.Password,
-                Phone = chefResponse.Phone,
-                Money = chefResponse.Money,
-                Banking = chefResponse.Banking
+                Name = chefRequest.Name,
+                Address = chefRequest.Address,
+                CreatorId = chefRequest.CreatorId,
+                ProfilePicture = profilePicturePath, // Set the profile picture path here
+                Score = chefRequest.Score,
+                Hours = chefRequest.Hours,
+                Status = chefRequest.Status,
+                Email = chefRequest.Email,
+                Password = chefRequest.Password,
+                Phone = chefRequest.Phone,
+                Money = chefRequest.Money,
+                Banking = chefRequest.Banking
             };
 
             _unitOfWork.ChefRepository.Insert(chef);
@@ -223,27 +288,76 @@ namespace HomeeAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (await ChefExists(chef.Id))
-                {
-                    var errorResponse = new ApiResponse<ChefResponse>();
-                    errorResponse.Error("Chef conflict");
-                    return Conflict(errorResponse);
-                }
-                else
-                {
-                    throw;
-                }
+                var errorResponse = new ApiResponse<ChefResponse>();
+                errorResponse.Error("Failed to register chef");
+                return Conflict(errorResponse);
             }
 
-            chefResponse.Id = chef.Id;
+            var chefResponse = new ChefResponse
+            {
+                Id = chef.Id,
+                Name = chef.Name,
+                Address = chef.Address,
+                CreatorId = chef.CreatorId,
+                ProfilePicture = chef.ProfilePicture,
+                Score = chef.Score,
+                Hours = chef.Hours,
+                Status = chef.Status,
+                Email = chef.Email,
+                Password = chef.Password,
+                Phone = chef.Phone,
+                Money = chef.Money,
+                Banking = chef.Banking
+            };
 
             var response = new ApiResponse<ChefResponse>();
             response.Ok(chefResponse);
             return CreatedAtAction("GetChef", new { id = chef.Id }, response);
         }
 
-        // DELETE: api/Chefs/5
-        [HttpDelete("{id}")]
+        // Helper method to upload profile picture
+        private async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var extension = Path.GetExtension(file.FileName).ToUpperInvariant();
+            var validExtensions = new List<string> { ".JPEG", ".JPG", ".PNG", ".GIF" };
+            if (!validExtensions.Contains(extension))
+            {
+                return BadRequest("Invalid file extension. Allowed extensions are: .JPEG, .JPG, .PNG, .GIF.");
+            }
+
+            var fileSizeLimit = 5 * 1024 * 1024; // 5MB
+            if (file.Length > fileSizeLimit)
+            {
+                return BadRequest("File size exceeds 5MB.");
+            }
+
+            var fileName = Guid.NewGuid().ToString() + extension;
+
+            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            if (!Directory.Exists(uploadsDir))
+            {
+                Directory.CreateDirectory(uploadsDir);
+            }
+
+            var filePath = Path.Combine(uploadsDir, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var response = new { FilePath = $"uploads/{fileName}" };
+            return Ok(response);
+        }
+    
+
+
+    // DELETE: api/Chefs/5
+    [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChef(int id)
         {
             var chef = _unitOfWork.ChefRepository.GetByID(id);
@@ -265,7 +379,6 @@ namespace HomeeAPI.Controllers
             var chef = _unitOfWork.ChefRepository.GetByID(id);
             return chef != null;
         }
-
         [HttpPost("login")]
         public async Task<ActionResult<ChefResponse>> Login(ChefResponse loginRequest)
         {
@@ -297,12 +410,12 @@ namespace HomeeAPI.Controllers
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("ChefId", existingChef.Id.ToString()),
-        new Claim("Email", existingChef.Email.ToString()),
-        new Claim(ClaimTypes.Role, "Chef")
-    };
+                new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("ChefId", existingChef.Id.ToString()),
+                new Claim("Email", existingChef.Email.ToString()),
+                new Claim(ClaimTypes.Role, "Chef")
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -380,5 +493,44 @@ namespace HomeeAPI.Controllers
             response.Ok(chefResponse);
             return CreatedAtAction("GetChef", new { id = chef.Id }, response);
         }
+        //up ảnh 
+        //[HttpPost("upload")]
+        //public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        //{
+        //    if (file == null || file.Length == 0)
+        //    {
+        //        return BadRequest("No file uploaded.");
+        //    }
+
+        //    var extension = Path.GetExtension(file.FileName).ToUpperInvariant();
+        //    var validExtensions = new List<string> { ".JPEG", ".JPG", ".PNG", ".GIF" };
+        //    if (!validExtensions.Contains(extension))
+        //    {
+        //        return BadRequest("Invalid file extension. Allowed extensions are: .JPEG, .JPG, .PNG, .GIF.");
+        //    }
+
+        //    var fileSizeLimit = 5 * 1024 * 1024; // 5MB
+        //    if (file.Length > fileSizeLimit)
+        //    {
+        //        return BadRequest("File size exceeds 5MB.");
+        //    }
+
+        //    var fileName = Guid.NewGuid().ToString() + extension;
+
+        //    var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+        //    if (!Directory.Exists(uploadsDir))
+        //    {
+        //        Directory.CreateDirectory(uploadsDir);
+        //    }
+
+        //    var filePath = Path.Combine(uploadsDir, fileName);
+        //    using (var stream = new FileStream(filePath, FileMode.Create))
+        //    {
+        //        await file.CopyToAsync(stream);
+        //    }
+
+        //    var response = new { FilePath = $"uploads/{fileName}" };
+        //    return Ok(response);
+        //}
     }
 }

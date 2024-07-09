@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Common;
+using HomeeAPI.DTO.RequestObject;
 
 namespace HomeeAPI.Controllers
 {   
@@ -211,23 +212,38 @@ namespace HomeeAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<UserResponse>>> PostUser(UserResponse userResponse)
+        public async Task<ActionResult<ApiResponse<UserResponse>>> PostUser([FromForm] UserRequest userRequest, IFormFile file)
         {
+            string avatarPath = null;
+            if (file != null && file.Length > 0)
+            {
+                var uploadResponse = await UploadAvatar(file);
+                if (uploadResponse is OkObjectResult okResult)
+                {
+                    var responseObject = okResult.Value as dynamic;
+                    avatarPath = responseObject.FilePath;
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload avatar.");
+                }
+            }
+
             var user = new User
             {
-                Email = userResponse.Email,
-                FirstName = userResponse.FirstName,
-                LastName = userResponse.LastName,
-                Password = userResponse.Password,
-                Phone = userResponse.Phone,
-                Address = userResponse.Address,
-                Dob = userResponse.Dob,
-                Gender = userResponse.Gender,
-                Avatar = userResponse.Avatar,
-                RoleId = userResponse.RoleId,
-                Status = userResponse.Status,
-                Money = userResponse.Money,
-                Discount = userResponse.Discount
+                Email = userRequest.Email,
+                FirstName = userRequest.FirstName,
+                LastName = userRequest.LastName,
+                Password = userRequest.Password,
+                Phone = userRequest.Phone,
+                Address = userRequest.Address,
+                Dob = userRequest.Dob,
+                Gender = userRequest.Gender,
+                Avatar = avatarPath, // Set the avatar path here
+                RoleId = userRequest.RoleId,
+                Status = userRequest.Status,
+                Money = userRequest.Money,
+                Discount = userRequest.Discount
             };
 
             _unitOfWork.UserRepository.Insert(user);
@@ -250,12 +266,66 @@ namespace HomeeAPI.Controllers
                 }
             }
 
-            userResponse.Id = user.Id;
+            var userResponse = new UserResponse
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                Address = user.Address,
+                Dob = user.Dob,
+                Gender = user.Gender,
+                Avatar = user.Avatar,
+                RoleId = user.RoleId,
+                Status = user.Status,
+                Money = user.Money,
+                Discount = user.Discount
+            };
 
             var response = new ApiResponse<UserResponse>();
             response.Ok(userResponse);
             return CreatedAtAction("GetUser", new { id = user.Id }, response);
         }
+
+        private async Task<IActionResult> UploadAvatar(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var extension = Path.GetExtension(file.FileName).ToUpperInvariant();
+            var validExtensions = new List<string> { ".JPEG", ".JPG", ".PNG", ".GIF" };
+            if (!validExtensions.Contains(extension))
+            {
+                return BadRequest("Invalid file extension. Allowed extensions are: .JPEG, .JPG, .PNG, .GIF.");
+            }
+
+            var fileSizeLimit = 5 * 1024 * 1024; // 5MB
+            if (file.Length > fileSizeLimit)
+            {
+                return BadRequest("File size exceeds 5MB.");
+            }
+
+            var fileName = Guid.NewGuid().ToString() + extension;
+
+            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            if (!Directory.Exists(uploadsDir))
+            {
+                Directory.CreateDirectory(uploadsDir);
+            }
+
+            var filePath = Path.Combine(uploadsDir, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var response = new { FilePath = $"uploads/{fileName}" };
+            return Ok(response);
+        }
+
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
@@ -410,5 +480,6 @@ namespace HomeeAPI.Controllers
             response.Ok(userResponse);
             return CreatedAtAction("GetUser", new { id = user.Id }, response);
         }
+        
     }
 }

@@ -8,6 +8,7 @@ using HomeeRepositories.Models;
 using HomeeRepositories.Interface;
 using HomeeAPI.DTO;
 using HomeeAPI.DTO.ResponseObject;
+using HomeeAPI.DTO.RequestObject;
 
 namespace HomeeAPI.Controllers
 {
@@ -91,13 +92,84 @@ namespace HomeeAPI.Controllers
         }
 
         // POST: api/Foods
+        //[HttpPost]
+        //public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood(FoodResponse foodRequest)
+        //{
+        //    var food = new Food
+        //    {
+        //        Name = foodRequest.Name,
+        //        Image = foodRequest.Image,
+        //        FoodType = foodRequest.FoodType,
+        //        Price = foodRequest.Price,
+        //        SellPrice = foodRequest.SellPrice,
+        //        CategoryId = foodRequest.CategoryId,
+        //        ChefId = foodRequest.ChefId,
+        //        SellCount = foodRequest.SellCount,
+        //        Status = foodRequest.Status
+        //    };
+
+        //    _unitOfWork.FoodRepository.Insert(food);
+
+        //    try
+        //    {
+        //        _unitOfWork.Save();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (await FoodExists(food.Id))
+        //        {
+        //            var errorResponse = new ApiResponse<FoodResponse>();
+        //            errorResponse.Error("Food conflict");
+        //            return Conflict(errorResponse);
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    var foodResponse = new FoodResponse
+        //    {
+        //        Id = food.Id,
+        //        Name = food.Name,
+        //        Image = food.Image,
+        //        FoodType = food.FoodType,
+        //        Price = food.Price,
+        //        SellPrice = food.SellPrice,
+        //        SellCount = food.SellCount,
+        //        Status = food.Status,
+        //        CategoryId = food.CategoryId,
+        //        ChefId = food.ChefId
+        //    };
+
+        //    var response = new ApiResponse<FoodResponse>();
+        //    response.Ok(foodResponse);
+        //    return CreatedAtAction("GetFood", new { id = food.Id }, response);
+        //}
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood(FoodResponse foodRequest)
+        public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood([FromForm] FoodRequest foodRequest, IFormFile file)
         {
+            // Upload image if provided
+            string imagePath = null;
+            if (file != null && file.Length > 0)
+            {
+                var uploadResponse = await UploadFoodImage(file);
+                if (uploadResponse is OkObjectResult okResult)
+                {
+                    var responseObject = okResult.Value as dynamic;
+                    imagePath = responseObject.FilePath;
+                }
+                else
+                {
+                    // Handle upload error if needed
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload food image.");
+                }
+            }
+
             var food = new Food
             {
                 Name = foodRequest.Name,
-                Image = foodRequest.Image,
+                Image = imagePath, // Set the image path here
                 FoodType = foodRequest.FoodType,
                 Price = foodRequest.Price,
                 SellPrice = foodRequest.SellPrice,
@@ -145,6 +217,44 @@ namespace HomeeAPI.Controllers
             response.Ok(foodResponse);
             return CreatedAtAction("GetFood", new { id = food.Id }, response);
         }
+        private async Task<IActionResult> UploadFoodImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var extension = Path.GetExtension(file.FileName).ToUpperInvariant();
+            var validExtensions = new List<string> { ".JPEG", ".JPG", ".PNG", ".GIF" };
+            if (!validExtensions.Contains(extension))
+            {
+                return BadRequest("Invalid file extension. Allowed extensions are: .JPEG, .JPG, .PNG, .GIF.");
+            }
+
+            var fileSizeLimit = 5 * 1024 * 1024; // 5MB
+            if (file.Length > fileSizeLimit)
+            {
+                return BadRequest("File size exceeds 5MB.");
+            }
+
+            var fileName = Guid.NewGuid().ToString() + extension;
+
+            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            if (!Directory.Exists(uploadsDir))
+            {
+                Directory.CreateDirectory(uploadsDir);
+            }
+
+            var filePath = Path.Combine(uploadsDir, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var response = new { FilePath = $"uploads/{fileName}" };
+            return Ok(response);
+        }
+
 
         // PUT: api/Foods
         [HttpPut("{id}")]
@@ -237,79 +347,10 @@ namespace HomeeAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("by-chef")]
-        public ActionResult<ApiResponse<IEnumerable<FoodResponse>>> GetFoodsByChef(int chefId)
-        {
-            var response = new ApiResponse<IEnumerable<FoodResponse>>();
-
-            try
-            {
-                var foods = _unitOfWork.FoodRepository.GetAll()
-                                                        .Where(food => food.ChefId == chefId)
-                                                        .Select(food => new FoodResponse
-                                                        {
-                                                            Id = food.Id,
-                                                            Name = food.Name,
-                                                            Image = food.Image,
-                                                            FoodType = food.FoodType,
-                                                            Price = food.Price,
-                                                            SellPrice = food.SellPrice,
-                                                            CategoryId = food.CategoryId,
-                                                            ChefId = food.ChefId,
-                                                            SellCount = food.SellCount,
-                                                            Status = food.Status
-                                                        }).ToList();
-
-                response.Ok(foods);
-            }
-            catch (Exception ex)
-            {
-                response.Error($"An error occurred while retrieving foods: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
-        }
-
-        [HttpGet("by-category")]
-        public ActionResult<ApiResponse<IEnumerable<FoodResponse>>> GetFoodsByCategory(int cateId)
-        {
-            var response = new ApiResponse<IEnumerable<FoodResponse>>();
-
-            try
-            {
-                var foods = _unitOfWork.FoodRepository.GetAll()
-                                                        .Where(food => food.CategoryId == cateId)
-                                                        .Select(food => new FoodResponse
-                                                        {
-                                                            Id = food.Id,
-                                                            Name = food.Name,
-                                                            Image = food.Image,
-                                                            FoodType = food.FoodType,
-                                                            Price = food.Price,
-                                                            SellPrice = food.SellPrice,
-                                                            CategoryId = food.CategoryId,
-                                                            ChefId = food.ChefId,
-                                                            SellCount = food.SellCount,
-                                                            Status = food.Status
-                                                        }).ToList();
-
-                response.Ok(foods);
-            }
-            catch (Exception ex)
-            {
-                response.Error($"An error occurred while retrieving foods: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
-        }
         private async Task<bool> FoodExists(int id)
         {
             var food = _unitOfWork.FoodRepository.GetByID(id);
             return food != null;
         }
-
-
     }
 }

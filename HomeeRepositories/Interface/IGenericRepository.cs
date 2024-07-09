@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HomeeRepositories.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,5 @@ namespace HomeeRepositories.Interface
         void Update(TEntity entityToUpdate);
 
         TEntity Get(Expression<Func<TEntity, bool>> predicate);
-         IEnumerable<TEntity> GetAll();
-     
     }
 }

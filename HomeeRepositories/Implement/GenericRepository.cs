@@ -59,10 +59,6 @@ namespace HomeeRepositories.Implement
             return query.ToList();
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return dbSet.ToList();
-        }
         public virtual TEntity GetByID(object id)
         {
             return dbSet.Find(id);

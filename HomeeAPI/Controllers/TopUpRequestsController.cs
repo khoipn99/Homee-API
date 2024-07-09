@@ -21,7 +21,40 @@ namespace HomeeAPI.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        // GET: api/TopUpRequest
+        [HttpGet]
+        public ActionResult<ApiResponse<IEnumerable<TopUpRequestResponse>>> GetTopUpRequests(int pageIndex = 1, int pageSize = 10)
+        {
+            var response = new ApiResponse<IEnumerable<TopUpRequestResponse>>();
 
+            try
+            {
+                var topUpRequests = _unitOfWork.TopUpRequestRepository.Get(
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    orderBy: q => q.OrderBy(topUpRequest => topUpRequest.Id)
+                    )
+                    .Select(topUpRequest => new TopUpRequestResponse
+                    {
+                        Id = topUpRequest.Id,
+                        UserId = topUpRequest.UserId,
+                        ChefId = topUpRequest.ChefId,
+                        Amount = topUpRequest.Amount,
+                        RequestDate = topUpRequest.RequestDate,
+                        IsApproved = topUpRequest.IsApproved,
+                        ApprovalDate = topUpRequest.ApprovalDate
+                    }).ToList();
+
+                response.Ok(topUpRequests);
+            }
+            catch (Exception ex)
+            {
+                response.Error($"An error occurred while retrieving top-up requests: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+
+            return Ok(response);
+        }
         // POST: api/TopUpRequest
         [HttpPost]
         public async Task<ActionResult<ApiResponse<TopUpRequestResponse>>> PostTopUpRequest(TopUpRequestResponse topUpRequestResponse)

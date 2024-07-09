@@ -13,10 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Add services to the container.
 
-
-
-
-
 var connectionString = builder.Configuration.GetConnectionString("MyDB");
 builder.Services.AddDbContext<HomeeContext>(options =>
     options.UseSqlServer(connectionString));
@@ -27,11 +23,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:3000")
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
                           .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials());
+                          .AllowAnyMethod());
 });
 
 
@@ -58,7 +53,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-    
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -99,7 +94,7 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My apiv1"))
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 

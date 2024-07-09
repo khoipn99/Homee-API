@@ -150,6 +150,7 @@ namespace HomeeAPI.Controllers
             return NoContent();
         }
 
+        // POST: api/Payments
         [HttpPost]
         public async Task<ActionResult<ApiResponse<PaymentResponse>>> PostPayment(PaymentResponse paymentResponse)
         {
@@ -224,6 +225,7 @@ namespace HomeeAPI.Controllers
         }
 
 
+
         // DELETE: api/Payments/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePayment(int id)
@@ -247,7 +249,5 @@ namespace HomeeAPI.Controllers
             var payment = _unitOfWork.PaymentRepository.GetByID(id);
             return payment != null;
         }
-
-
     }
 }
