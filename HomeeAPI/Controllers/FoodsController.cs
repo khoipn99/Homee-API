@@ -219,7 +219,6 @@ namespace HomeeAPI.Controllers
 
             return NoContent();
         }
-
         // DELETE: api/Foods/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFood(int id)
@@ -305,7 +304,6 @@ namespace HomeeAPI.Controllers
 
             return Ok(response);
         }
-
         private async Task<bool> FoodExists(int id)
         {
             var food = _unitOfWork.FoodRepository.GetByID(id);

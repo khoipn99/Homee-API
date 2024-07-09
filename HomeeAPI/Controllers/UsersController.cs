@@ -346,7 +346,6 @@ namespace HomeeAPI.Controllers
             string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new { Token= tokenValue, UserResponse = userResponse});
         }
-
         [HttpPost("Register")]
         public async Task<ActionResult<ApiResponse<UserResponse>>> Register(UserResponse registerRequest)
         {

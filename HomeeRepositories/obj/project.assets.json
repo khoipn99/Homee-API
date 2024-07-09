@@ -4412,24 +4412,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ProTech247\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ProTech247\\Downloads\\Homee111\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
+      "projectUniqueName": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
       "projectName": "HomeeRepositories",
-      "projectPath": "C:\\Users\\ProTech247\\Downloads\\Homee111\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
-      "packagesPath": "C:\\Users\\ProTech247\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ProTech247\\Downloads\\Homee111\\Homee\\HomeeRepositories\\obj\\",
+      "projectPath": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\HomeeRepositories.csproj",
+      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+      "outputPath": "D:\\Khoi\\EXE101\\Homee\\Homee\\HomeeRepositories\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ProTech247\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4510,7 +4505,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

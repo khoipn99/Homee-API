@@ -147,7 +147,8 @@ namespace HomeeAPI.Controllers
                 FoodId = orderDetailResponse.FoodId,
                 Price = orderDetailResponse.Price,
                 Quantity = orderDetailResponse.Quantity,
-                Status = orderDetailResponse.Status
+                Status = orderDetailResponse.Status,
+                               OrderId = orderDetailResponse.OrderId
             };
 
             _unitOfWork.OrderDetailRepository.Insert(orderDetail);

@@ -179,7 +179,9 @@ namespace HomeeAPI.Controllers
                 Quantity = orderResponse.Quantity,
                 UserId = orderResponse.UserId,
                 Status = orderResponse.Status,
-                OrderDate = orderResponse.OrderDate
+                OrderDate = orderResponse.OrderDate,
+ 
+
             };
 
             _unitOfWork.OrderRepository.Insert(order);
@@ -221,7 +223,7 @@ namespace HomeeAPI.Controllers
                 return NotFound(errorResponse);
             }
 
-            _unitOfWork.OrderRepository.Delete(id);
+            _unitOfWork.OrderRepository.Delete(id); 
             _unitOfWork.Save();
 
             return NoContent();
