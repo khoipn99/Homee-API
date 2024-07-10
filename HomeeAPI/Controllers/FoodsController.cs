@@ -352,5 +352,71 @@ namespace HomeeAPI.Controllers
             var food = _unitOfWork.FoodRepository.GetByID(id);
             return food != null;
         }
+        [HttpGet("by-category")]
+        public ActionResult<ApiResponse<IEnumerable<FoodResponse>>> GetFoodsByCategory(int cateId)
+        {
+            var response = new ApiResponse<IEnumerable<FoodResponse>>();
+
+            try
+            {
+                var foods = _unitOfWork.FoodRepository.Get()
+                                                        .Where(food => food.CategoryId == cateId)
+                                                        .Select(food => new FoodResponse
+                                                        {
+                                                            Id = food.Id,
+                                                            Name = food.Name,
+                                                            Image = food.Image,
+                                                            FoodType = food.FoodType,
+                                                            Price = food.Price,
+                                                            SellPrice = food.SellPrice,
+                                                            CategoryId = food.CategoryId,
+                                                            ChefId = food.ChefId,
+                                                            SellCount = food.SellCount,
+                                                            Status = food.Status
+                                                        }).ToList();
+
+                response.Ok(foods);
+            }
+            catch (Exception ex)
+            {
+                response.Error($"An error occurred while retrieving foods: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+
+            return Ok(response);
+        }
+        [HttpGet("by-chef")]
+        public ActionResult<ApiResponse<IEnumerable<FoodResponse>>> GetFoodsByChef(int chefId)
+        {
+            var response = new ApiResponse<IEnumerable<FoodResponse>>();
+
+            try
+            {
+                var foods = _unitOfWork.FoodRepository.Get()
+                                                        .Where(food => food.ChefId == chefId)
+                                                        .Select(food => new FoodResponse
+                                                        {
+                                                            Id = food.Id,
+                                                            Name = food.Name,
+                                                            Image = food.Image,
+                                                            FoodType = food.FoodType,
+                                                            Price = food.Price,
+                                                            SellPrice = food.SellPrice,
+                                                            CategoryId = food.CategoryId,
+                                                            ChefId = food.ChefId,
+                                                            SellCount = food.SellCount,
+                                                            Status = food.Status
+                                                        }).ToList();
+
+                response.Ok(foods);
+            }
+            catch (Exception ex)
+            {
+                response.Error($"An error occurred while retrieving foods: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+
+            return Ok(response);
+        }
     }
 }

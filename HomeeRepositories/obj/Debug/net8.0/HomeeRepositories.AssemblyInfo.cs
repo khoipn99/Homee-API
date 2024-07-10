@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HomeeRepositories")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd02523569e7ff5b410342c617b311d010096e5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("HomeeRepositories")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HomeeRepositories")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

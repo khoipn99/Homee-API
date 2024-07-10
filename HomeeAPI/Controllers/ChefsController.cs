@@ -493,6 +493,7 @@ namespace HomeeAPI.Controllers
             response.Ok(chefResponse);
             return CreatedAtAction("GetChef", new { id = chef.Id }, response);
         }
+
         //up ảnh 
         //[HttpPost("upload")]
         //public async Task<IActionResult> UploadProfilePicture(IFormFile file)
@@ -532,5 +533,6 @@ namespace HomeeAPI.Controllers
         //    var response = new { FilePath = $"uploads/{fileName}" };
         //    return Ok(response);
         //}
+
     }
 }
