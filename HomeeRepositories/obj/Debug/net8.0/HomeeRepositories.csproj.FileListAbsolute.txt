@@ -12,3 +12,18 @@ C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\refint\
 C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.pdb
 C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.genruntimeconfig.cache
 C:\Users\Admin\Desktop\test prn\Homee\HomeeRepositories\obj\Debug\net8.0\ref\HomeeRepositories.dll
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.deps.json
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.runtimeconfig.json
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.dll
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\bin\Debug\net8.0\HomeeRepositories.pdb
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.AssemblyReference.cache
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.GeneratedMSBuildEditorConfig.editorconfig
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfoInputs.cache
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.AssemblyInfo.cs
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.csproj.CoreCompileInputs.cache
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.sourcelink.json
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.dll
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\refint\HomeeRepositories.dll
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.pdb
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\HomeeRepositories.genruntimeconfig.cache
+D:\Khoi\EXE101\Homee-API\HomeeRepositories\obj\Debug\net8.0\ref\HomeeRepositories.dll

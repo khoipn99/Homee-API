@@ -91,62 +91,62 @@ namespace HomeeAPI.Controllers
             return Ok(response);
         }
 
-        // POST: api/Foods
-        //[HttpPost]
-        //public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood(FoodResponse foodRequest)
-        //{
-        //    var food = new Food
-        //    {
-        //        Name = foodRequest.Name,
-        //        Image = foodRequest.Image,
-        //        FoodType = foodRequest.FoodType,
-        //        Price = foodRequest.Price,
-        //        SellPrice = foodRequest.SellPrice,
-        //        CategoryId = foodRequest.CategoryId,
-        //        ChefId = foodRequest.ChefId,
-        //        SellCount = foodRequest.SellCount,
-        //        Status = foodRequest.Status
-        //    };
 
-        //    _unitOfWork.FoodRepository.Insert(food);
-
-        //    try
-        //    {
-        //        _unitOfWork.Save();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (await FoodExists(food.Id))
-        //        {
-        //            var errorResponse = new ApiResponse<FoodResponse>();
-        //            errorResponse.Error("Food conflict");
-        //            return Conflict(errorResponse);
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    var foodResponse = new FoodResponse
-        //    {
-        //        Id = food.Id,
-        //        Name = food.Name,
-        //        Image = food.Image,
-        //        FoodType = food.FoodType,
-        //        Price = food.Price,
-        //        SellPrice = food.SellPrice,
-        //        SellCount = food.SellCount,
-        //        Status = food.Status,
-        //        CategoryId = food.CategoryId,
-        //        ChefId = food.ChefId
-        //    };
-
-        //    var response = new ApiResponse<FoodResponse>();
-        //    response.Ok(foodResponse);
-        //    return CreatedAtAction("GetFood", new { id = food.Id }, response);
-        //}
         [HttpPost]
+        public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood(FoodResponse foodRequest)
+        {
+            var food = new Food
+            {
+                Name = foodRequest.Name,
+                Image = foodRequest.Image,
+                FoodType = foodRequest.FoodType,
+                Price = foodRequest.Price,
+                SellPrice = foodRequest.SellPrice,
+                CategoryId = foodRequest.CategoryId,
+                ChefId = foodRequest.ChefId,
+                SellCount = foodRequest.SellCount,
+                Status = foodRequest.Status
+            };
+
+            _unitOfWork.FoodRepository.Insert(food);
+
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateException)
+            {
+                if (await FoodExists(food.Id))
+                {
+                    var errorResponse = new ApiResponse<FoodResponse>();
+                    errorResponse.Error("Food conflict");
+                    return Conflict(errorResponse);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            var foodResponse = new FoodResponse
+            {
+                Id = food.Id,
+                Name = food.Name,
+                Image = food.Image,
+                FoodType = food.FoodType,
+                Price = food.Price,
+                SellPrice = food.SellPrice,
+                SellCount = food.SellCount,
+                Status = food.Status,
+                CategoryId = food.CategoryId,
+                ChefId = food.ChefId
+            };
+
+            var response = new ApiResponse<FoodResponse>();
+            response.Ok(foodResponse);
+            return CreatedAtAction("GetFood", new { id = food.Id }, response);
+        }
+        [HttpPost("food-img")]
         public async Task<ActionResult<ApiResponse<FoodResponse>>> PostFood([FromForm] FoodRequest foodRequest, IFormFile file)
         {
             // Upload image if provided
@@ -217,6 +217,7 @@ namespace HomeeAPI.Controllers
             response.Ok(foodResponse);
             return CreatedAtAction("GetFood", new { id = food.Id }, response);
         }
+
         private async Task<IActionResult> UploadFoodImage(IFormFile file)
         {
             if (file == null || file.Length == 0)

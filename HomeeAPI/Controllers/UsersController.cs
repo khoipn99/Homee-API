@@ -212,6 +212,53 @@ namespace HomeeAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
+        public async Task<ActionResult<ApiResponse<UserResponse>>> PostUser(UserResponse userResponse)
+        {
+            var user = new User
+            {
+                Email = userResponse.Email,
+                FirstName = userResponse.FirstName,
+                LastName = userResponse.LastName,
+                Password = userResponse.Password,
+                Phone = userResponse.Phone,
+                Address = userResponse.Address,
+                Dob = userResponse.Dob,
+                Gender = userResponse.Gender,
+                Avatar = userResponse.Avatar,
+                RoleId = userResponse.RoleId,
+                Status = userResponse.Status,
+                Money = userResponse.Money,
+                Discount = userResponse.Discount
+            };
+
+            _unitOfWork.UserRepository.Insert(user);
+
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateException)
+            {
+                if (await UserExists(user.Id))
+                {
+                    var errorResponse = new ApiResponse<UserResponse>();
+                    errorResponse.Error("User conflict");
+                    return Conflict(errorResponse);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            userResponse.Id = user.Id;
+
+            var response = new ApiResponse<UserResponse>();
+            response.Ok(userResponse);
+            return CreatedAtAction("GetUser", new { id = user.Id }, response);
+        }
+
+        [HttpPost("UserImg")]
         public async Task<ActionResult<ApiResponse<UserResponse>>> PostUser([FromForm] UserRequest userRequest, IFormFile file)
         {
             string avatarPath = null;
@@ -350,6 +397,7 @@ namespace HomeeAPI.Controllers
             var user = _unitOfWork.UserRepository.GetByID(id);
             return user != null;
         }
+
         // POST: api/Users/Login
         [HttpPost("Login")]
         public async Task<ActionResult<UserResponse>> Login(UserResponse loginRequest)
@@ -416,6 +464,7 @@ namespace HomeeAPI.Controllers
             string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new { Token= tokenValue, UserResponse = userResponse});
         }
+
         [HttpPost("Register")]
         public async Task<ActionResult<ApiResponse<UserResponse>>> Register(UserResponse registerRequest)
         {
