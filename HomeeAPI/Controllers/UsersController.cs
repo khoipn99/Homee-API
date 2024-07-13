@@ -468,7 +468,7 @@ namespace HomeeAPI.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<ApiResponse<UserResponse>>> Register(UserResponse registerRequest)
         {
-            var existingUser =  _unitOfWork.UserRepository.Get().ToList().Any(u => u.Email == registerRequest.Email);
+            var existingUser =  _unitOfWork.UserRepository.Get().FirstOrDefault(u => u.Email == registerRequest.Email);
 
             if (existingUser != null)
             {
